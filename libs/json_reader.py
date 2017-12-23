@@ -22,11 +22,13 @@ def writeJson(filename, data):
     return 0
 
 
-def readJson(filename):
+def readJson(filename, attribute=None):
     try:
         with open(buildPath(filename)) as json_data:
-            array = json.load(json_data)
-        return array
+            data = json.load(json_data)
+        if attribute:
+            return data[attribute]
+        return data
     except IOError as ioerror:
         print ioerror
         return 1
