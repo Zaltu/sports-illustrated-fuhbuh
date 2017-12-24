@@ -12,5 +12,6 @@ def roll(callout, stance): # eg roll('Line Plunge', 'offense')
     #host = conn.socket.validateResolveHost TODO: this goes to dispatcher
 
 
-def processPlay(attack, defense)
+def processPlay(stance1, stance2)
+	
     pass
