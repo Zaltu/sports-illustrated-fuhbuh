@@ -7,7 +7,7 @@ def buildPath(fileName):
     """
     Standardizes filepath to conform with an executable version built using pyinstaller
 
-    :param string filename: name of the file
+    :param string fileName: name of the file
     :return: state-dependant filepath
     :rtype: string
     """
