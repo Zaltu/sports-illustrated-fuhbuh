@@ -1,16 +1,65 @@
 from libs.namespace import Namespace
+from libs import json_reader
 from src.play import play
 from gui.sub.coinflip import CoinFlip
 from gui.sub.stateerror import StateError
 
 
 STANCES = ['Offense', 'Defense', 'Kick', 'Return']
+
+
+def validateState():
+    try:
+        assert GAME.team
+        assert GAME.enemy
+        assert GAME.state
+        assert GAME.turn
+        assert GAME.clock
+        assert GAME.score
+        assert GAME.conn
+        assert GAME.localstance
+    except AssertionError:
+        GAME.state = StateError
+        return 0
+    return 1
+
+
+"""
+A = [
+        (10,    ),
+        (20,    ),
+        (30,    ),
+        (40,    ),
+        ...
+    ]
+"""
+def weightedRoll(stance, perc):
+    numProbTable = json_reader.readJSON("NumProb.json")
+    for sheetRoll in numProbTable[stance]:
+        if numProbTable[stance][numProbTable[stance].index(sheetRoll)+1][0] > perc:
+            return sheetRoll[0]
+
+
+def setTeam(team):
+    GAME.team = team
+    return 1
+
+def setEnemy(team):
+    GAME.enemy = team
+    return 1
+
+def setState(state):
+    GAME.state = state
+    return 1
+
+
 GAME = Namespace()
 GAME.clock = ['1st', 720]
 GAME.simplePriorityLow = ['+', '-']
 GAME.score = (0, 0) # (Me, Them)
-GAME.state = CoinFlip
+GAME.state = CoinFlip # QWidget object
 GAME.conn = None # IP address or connection object for the second player
+GAME.localstance = ''
 
 GAME.playmap = {
     '+': play.soft,
@@ -26,37 +75,7 @@ GAME.playmap = {
     'INT': play.intercept
 }
 
-GAME.priority = {
-
-}
-
-
-def setTeam(team):
-    GAME.team = team
-    return 1
-
-def setEnemy(team):
-    GAME.enemy = team
-    return 1
-
-def setState(state):
-    GAME.state = state
-    return 1
-
 GAME.setTeam = setTeam
 GAME.setEnemy = setEnemy
 GAME.setState = setState
-
-def validateState():
-    try:
-        assert GAME.team
-        assert GAME.enemy
-        assert GAME.state
-        assert GAME.turn
-        assert GAME.clock
-        assert GAME.score
-        assert GAME.conn
-    except AssertionError:
-        GAME.state = StateError
-        return 0
-    return 1
+GAME.weightedRoll = weightedRoll

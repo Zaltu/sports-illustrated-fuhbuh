@@ -1,5 +1,8 @@
 from src import GAME
 
+
+# DEPRECATED
+
 def setTeam(team):
     GAME.team = team
     return 1

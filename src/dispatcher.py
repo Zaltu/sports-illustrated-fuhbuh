@@ -9,7 +9,8 @@ def dispatchC(calloutInput):
     host = conn.socket.validateResolveHost()
     if host:
         host.update(localReg)
-        graphicDispatch(processPlay(host))
+        GAME.rolls = host
+        graphicDispatch(processPlay())
     else:
         conn.socket.send(localReg)
     return
