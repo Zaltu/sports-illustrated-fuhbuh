@@ -5,8 +5,8 @@ from gui.sub.coinflip import CoinFlip
 from gui.sub.stateerror import StateError
 
 
-STANCES = ['Offense', 'Defense', 'Kick', 'Return']
-
+STANCES = ['Offense', 'Defense', 'Kick']
+GAME = Namespace()
 
 def validateState():
     try:
@@ -42,33 +42,40 @@ def weightedRoll(stance, perc):
 
 def setTeam(team):
     GAME.team = team
-    return 1
 
 def setEnemy(team):
     GAME.enemy = team
-    return 1
 
 def setState(state):
     GAME.state = state
-    return 1
+
+def switchYardSide():
+    GAME.yard = 100 - GAME.yard
+
+def toggleStance():
+    if GAME.localstance == "Attack" or GAME.localstance == "Kick":
+        GAME.localstance = "Defense"
+    else:
+        GAME.localstance = "Attack"
+    GAME.switchYardSide()
 
 
-GAME = Namespace()
 GAME.clock = ['1st', 720]
 GAME.simplePriorityLow = ['+', '-']
 GAME.score = (0, 0) # (Me, Them)
 GAME.state = CoinFlip # QWidget object
 GAME.conn = None # IP address or connection object for the second player
 GAME.localstance = ''
+GAME.yard = 40
 
 GAME.playmap = {
     '+': play.soft,
     '-': play.soft,
     ':+': play.hard,
     ':-': play.hard,
-    'OP': lambda t='OP': play.penalty(towards=t),
-    'DF': lambda t='DF': play.penalty(towards=t),
-    'PI': lambda t='PI': play.penalty(towards=t),
+    'OP': lambda f, t='OP': play.penalty(towards=t, fromStance=f),
+    'DF': lambda f, t='DF': play.penalty(towards=t, fromStance=f),
+    'PI': lambda f, t='PI': play.penalty(towards=t, fromStance=f),
     '0': play.incomplete,
     ':TD': play.hard,
     'QT': play.qtrouble,
@@ -79,3 +86,5 @@ GAME.setTeam = setTeam
 GAME.setEnemy = setEnemy
 GAME.setState = setState
 GAME.weightedRoll = weightedRoll
+GAME.switchYardSide = switchYardSide
+GAME.toggleStance = toggleStance

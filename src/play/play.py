@@ -28,7 +28,51 @@ def determinePriority():
         return 'Attack'
     else:
         return '+'
+    # TODO Resolve down
+    # TODO Resolve clock
 
 
 def _rolltype(rollRes):
     return rollRes.split(" ")[0]
+
+
+"""
+These represent all the different play types that can occur and their resolves.
+"""
+def soft():
+    mod1 = (int)(GAME.rolls["Defense"].split(" ")[1])
+    mod2 = (int)(GAME.rolls["Attack"].split(" ")[1])
+    if mod2 == 100:
+        # Soft TD
+        pass
+    GAME.yard += mod1+mod2
+
+
+def hard(fromStance):
+    mod = (int)(GAME.rolls[fromStance].split(" ")[1])
+    if mod == 100:
+        # Force TD
+        pass
+    GAME.yard += mod
+
+
+def incomplete(fromStance):
+    pass
+
+
+def interception(fromStance):
+    GAME.yard += (int)(GAME.rolls[fromStance].split(" ")[1])
+    GAME.toggleStance()
+
+
+def fumble(fromStance):
+    GAME.yard += (int)(GAME.rolls[fromStance].split(" ")[1])
+    GAME.toggleStance()
+
+
+def qtrouble(fromStance):
+    pass
+
+
+def penalty(towards, fromStance):
+    pass
