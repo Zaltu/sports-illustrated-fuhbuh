@@ -16,9 +16,12 @@ GAME.playmap = {
 	'DF': lambda t='DF':play.penalty(towards=t),
 	'PI': lambda t='PI':play.penalty(towards=t),
 	'0': play.incomplete,
-	':TD': play.hard,
+	':+TD': play.hard,
 	'QT': play.qtrouble,
-	'INT': play.intercept
+	'INT': play.intercept,
+	'F+': play.fumble,
+	'F-': play.fumble,
+	'BK-': play.fumble
 }
 
 GAME.priority = {
