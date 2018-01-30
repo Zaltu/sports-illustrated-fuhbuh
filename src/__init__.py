@@ -6,6 +6,7 @@ from gui.sub.stateerror import StateError
 
 
 STANCES = ['Offense', 'Defense', 'Kick']
+QNAMES = ['1st', '2nd', '3rd', '4th', 'END']
 GAME = Namespace()
 
 def validateState():
@@ -43,14 +44,18 @@ def weightedRoll(stance, perc):
 def setTeam(team):
     GAME.team = team
 
+
 def setEnemy(team):
     GAME.enemy = team
+
 
 def setState(state):
     GAME.state = state
 
+
 def switchYardSide():
     GAME.yard = 100 - GAME.yard
+
 
 def toggleStance():
     if GAME.localstance == "Attack" or GAME.localstance == "Kick":
