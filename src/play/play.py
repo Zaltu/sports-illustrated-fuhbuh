@@ -14,10 +14,10 @@ def roll(callout): # eg roll('Line Plunge')
 def processPlay():
     finalType = determinePriority()
     
-	if finalType:
-		GAME.playmap[_rolltype(finalType)]()#call resolve
-	else:
-		soft(rolls)
+    if finalType:
+        GAME.playmap[_rolltype(finalType)]()#call resolve
+    else:
+        soft(rolls)
 
 
 def determinePriority():
