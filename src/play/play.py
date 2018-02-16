@@ -1,6 +1,8 @@
 import random
 from libs import json_reader
-import src.GAME as GAME
+from src import GAME
+
+
 
 
 def roll(callout): # eg roll('Line Plunge')
@@ -13,11 +15,10 @@ def roll(callout): # eg roll('Line Plunge')
 
 def processPlay():
     finalType = determinePriority()
-    
     if finalType:
-        GAME.playmap[_rolltype(finalType)]()#call resolve
+        PLAYMAP[_rolltype(GAME.rolls[finalType])](finalType)#call resolve
     else:
-        soft(rolls)
+        soft()
 
 
 def determinePriority():
@@ -28,7 +29,7 @@ def determinePriority():
     elif attType not in GAME.simplePriorityLow:
         return 'Attack'
     else:
-        return '+'
+        return None
     # TODO Resolve down
     # TODO Resolve clock
 
@@ -41,20 +42,28 @@ def _rolltype(rollRes):
 These represent all the different play types that can occur and their resolves.
 """
 def soft():
-    mod1 = (int)(GAME.rolls["Defense"].split(" ")[1])
-    mod2 = (int)(GAME.rolls["Attack"].split(" ")[1])
+    mod1 = (int)(''.join(GAME.rolls["Defense"].split(" ")[:2]))
+    mod2 = (int)(''.join(GAME.rolls["Attack"].split(" ")[:2]))
     if mod2 == 100:
         # Soft TD
         pass
     GAME.yard += mod1+mod2
+    print mod1
+    print mod2
+    print GAME.yard
 
 
-def hard(fromStance):
+def hard(gain, fromStance):
     mod = (int)(GAME.rolls[fromStance].split(" ")[1])
     if mod == 100:
         # Force TD
         pass
-    GAME.yard += mod
+    if gain:
+        GAME.yard += mod
+    else:
+        GAME.yard -= mod
+    print mod
+    print GAME.yard
 
 
 def incomplete(fromStance):
@@ -75,5 +84,23 @@ def qtrouble(fromStance):
     pass
 
 
-def penalty(towards, fromStance):
+def penalty(towards):
     pass
+
+
+PLAYMAP = {
+    '+': soft,
+    '-': soft,
+    ':+': lambda s: hard(True, s),
+    ':-': lambda s: hard(False, s),
+    'OP': lambda t='OP': penalty(towards=t),
+    'DF': lambda t='DF': penalty(towards=t),
+    'PI': lambda t='PI': penalty(towards=t),
+    '0': incomplete,
+    ':+TD': lambda s: hard(True, s),
+    'QT': qtrouble,
+    'INT': interception,
+    'F+': fumble,
+    'F-': fumble,
+    'BK-': fumble
+}

@@ -1,6 +1,5 @@
 from libs.namespace import Namespace
 from libs import json_reader
-from src.play import play
 from gui.sub.coinflip import CoinFlip
 from gui.sub.stateerror import StateError
 
@@ -72,23 +71,6 @@ GAME.state = CoinFlip # QWidget object
 GAME.conn = None # IP address or connection object for the second player
 GAME.localstance = ''
 GAME.yard = 40
-
-GAME.playmap = {
-    '+': play.soft
-    '-': play.soft,
-    ':+': play.hard,
-    ':-': play.hard,
-    'OP': lambda t='OP':play.penalty(towards=t),
-    'DF': lambda t='DF':play.penalty(towards=t),
-    'PI': lambda t='PI':play.penalty(towards=t),
-    '0': play.incomplete,
-    ':+TD': play.hard,
-    'QT': play.qtrouble,
-    'INT': play.intercept,
-    'F+': play.fumble,
-    'F-': play.fumble,
-    'BK-': play.fumble
-}
 
 GAME.setTeam = setTeam
 GAME.setEnemy = setEnemy
