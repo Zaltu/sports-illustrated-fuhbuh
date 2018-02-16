@@ -19,6 +19,7 @@ def processPlay():
         PLAYMAP[_rolltype(GAME.rolls[finalType])](finalType)#call resolve
     else:
         soft()
+    GAME.boob = GAME.rolls[finalType].split(" ")[-1] == "*"
 
 
 def determinePriority():
@@ -34,8 +35,8 @@ def determinePriority():
     # TODO Resolve clock
 
 
-def _rolltype(rollRes):
-    return rollRes.split(" ")[0]
+def _rolltype(rollRes, position=0):
+    return rollRes.split(" ")[position]
 
 
 """
@@ -51,6 +52,8 @@ def soft():
     print mod1
     print mod2
     print GAME.yard
+    if _rollType(GAME.rolls['Attack'], position=-1) == "*" or _rollType(GAME.rolls['Defense'], position=-1) == "*":
+        GAME.boob = True
 
 
 def hard(gain, fromStance):

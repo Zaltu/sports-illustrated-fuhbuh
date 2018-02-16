@@ -1,6 +1,8 @@
 # CMD play for testing
+from pprint import pprint as pp
 
 from src import GAME
+from src import turnController
 from src.play import play
 
 GAME.setTeam('raiders.json')
@@ -11,6 +13,13 @@ GAME.rolls = {
     'Defense':':- 2'
 }
 
-print GAME
+pp(GAME)
 
-print play.processPlay()
+GAME.turn = "dummy"
+GAME.down = 1
+
+GAME.validateState()
+
+turnController.fullTurn()
+
+pp(GAME)

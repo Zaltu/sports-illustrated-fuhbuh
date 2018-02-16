@@ -1,15 +1,10 @@
 from gui.liaison import notify
 import src
 from src import GAME
+from src.play import play
 
-def graphicDispatch(play):
-    playToGame(play)
+def graphicDispatch():
     notify()
-
-
-def playToGame(play):
-    GAME.play = play
-
 
 def downChange():
     GAME.down += 1
@@ -25,6 +20,7 @@ def clock(star):
     GAME.clock[1] -= 30 if not star else 10
     if GAME.clock[1] <= 0:
         changeQuarters()
+    GAME.boob = False
 
 def changeQuarters():
     GAME.clock[0] = src.QNAMES[src.QNAMES.index(GAME.clock[0])+1]
@@ -34,3 +30,11 @@ def changeQuarters():
 
 def gameOver():
     pass
+
+
+def fullTurn():
+    play.processPlay()
+    downChange()
+    if GAME.down == 5:
+        turnOver()
+    clock(GAME.boob)

@@ -18,7 +18,8 @@ def validateState():
         assert GAME.score
         assert GAME.conn
         assert GAME.localstance
-    except AssertionError:
+        assert GAME.down
+    except (AssertionError, AttributeError):
         GAME.state = StateError
         return 0
     return 1
@@ -78,3 +79,4 @@ GAME.setState = setState
 GAME.weightedRoll = weightedRoll
 GAME.switchYardSide = switchYardSide
 GAME.toggleStance = toggleStance
+GAME.validateState = validateState
