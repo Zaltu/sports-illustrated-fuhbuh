@@ -35,10 +35,10 @@ A = [
     ]
 """
 def weightedRoll(stance, perc):
-    numProbTable = json_reader.readJSON("NumProb.json")
+    numProbTable = json_reader.readJson("data/dice.json")
     for sheetRoll in numProbTable[stance]:
-        if numProbTable[stance][numProbTable[stance].index(sheetRoll)+1][0] > perc:
-            return sheetRoll[0]
+        if numProbTable[stance][numProbTable[stance].index(sheetRoll)+1] > perc:
+            return sheetRoll
 
 
 def setTeam(team):

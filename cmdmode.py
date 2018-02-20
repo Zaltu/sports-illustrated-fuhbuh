@@ -20,6 +20,7 @@ GAME.down = 1
 
 GAME.validateState()
 
-turnController.fullTurn()
+print GAME.weightedRoll("Attack", 21)
 
-pp(GAME)
+#turnController.fullTurn()
+#pp(GAME)
