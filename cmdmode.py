@@ -1,6 +1,6 @@
 # CMD play for testing
 from pprint import pprint as pp
-
+import random
 from src import GAME
 from src import turnController
 from src.play import play
@@ -9,18 +9,20 @@ GAME.setTeam('raiders.json')
 GAME.setEnemy('raiders.json')
 
 GAME.rolls = {
-    'Attack':'+ 5 *',
-    'Defense':':- 2'
+    'Defense':'+ 0'
 }
-
-pp(GAME)
 
 GAME.turn = "dummy"
 GAME.down = 1
+GAME.callout = 'Line Plunge'
+GAME.localstance = "Offense"
 
 GAME.validateState()
 
-print GAME.weightedRoll("Attack", 21)
+#i = random.random()*100
+#print i
 
-#turnController.fullTurn()
-#pp(GAME)
+#print GAME.weightedRoll("Attack", i)
+
+turnController.fullTurn()
+pp(GAME)

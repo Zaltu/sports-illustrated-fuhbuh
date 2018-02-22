@@ -38,7 +38,8 @@ def weightedRoll(stance, perc):
     numProbTable = json_reader.readJson("data/dice.json")
     for sheetRoll in numProbTable[stance]:
         if numProbTable[stance][numProbTable[stance].index(sheetRoll)+1] > perc:
-            return sheetRoll
+            print (sheetRoll, numProbTable[stance].index(sheetRoll))
+            return numProbTable[stance].index(sheetRoll)
 
 
 def setTeam(team):
@@ -58,11 +59,12 @@ def switchYardSide():
 
 
 def toggleStance():
-    if GAME.localstance == "Attack" or GAME.localstance == "Kick":
+    if GAME.localstance == "Offense" or GAME.localstance == "Kick":
         GAME.localstance = "Defense"
     else:
-        GAME.localstance = "Attack"
+        GAME.localstance = "Offense"
     GAME.switchYardSide()
+    GAME.down = 1
 
 
 GAME.clock = ['1st', 720]
@@ -72,6 +74,7 @@ GAME.state = CoinFlip # QWidget object
 GAME.conn = None # IP address or connection object for the second player
 GAME.localstance = ''
 GAME.yard = 40
+GAME.boob = False
 
 GAME.setTeam = setTeam
 GAME.setEnemy = setEnemy

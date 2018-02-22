@@ -1,3 +1,4 @@
+import random
 from gui.liaison import notify
 import src
 from src import GAME
@@ -33,6 +34,8 @@ def gameOver():
 
 
 def fullTurn():
+    play.roll(GAME.callout)
+    print GAME.rolls
     play.processPlay()
     downChange()
     if GAME.down == 5:
