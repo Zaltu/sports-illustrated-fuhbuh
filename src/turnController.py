@@ -12,9 +12,10 @@ def downChange():
 
 
 def turnOver():
+    print "Switched sides!"
     GAME.down = 1
-    GAME.switchYardSide()
     GAME.toggleStance()
+    print "Offense is now on the %s yard line." % GAME.yard
 
 
 def clock(star):
@@ -34,10 +35,16 @@ def gameOver():
 
 
 def fullTurn():
+    print "%sth and %s on the %s" % (GAME.down, GAME.firstdown-GAME.yard, GAME.yard)
     play.roll(GAME.callout)
-    print GAME.rolls
     play.processPlay()
-    downChange()
+    print GAME.rolls
+    if GAME.yard >= GAME.firstdown:
+        print "First Down!"
+        GAME.down = 1
+        GAME.firstdown = GAME.yard + 10
+    else:
+        downChange()
     if GAME.down == 5:
         turnOver()
     clock(GAME.boob)

@@ -6,11 +6,13 @@ from src import GAME
 
 
 
-def roll(callout): # eg roll('Line Plunge')
+def roll(callout, offensePlay=None): # eg roll('Line Plunge')
     stats = json_reader.readJson("data/teams/"+GAME.team, attribute=GAME.localstance)
     numRoll = random.random()*100
-    GAME.rolls[GAME.localstance] = stats[callout][GAME.weightedRoll(GAME.localstance, numRoll)]
-
+    if not offensePlay:
+        GAME.rolls[GAME.localstance] = stats[callout][GAME.weightedRoll(GAME.localstance, numRoll)]
+    else:
+        GAME.rolls[GAME.localstance] = stats[callout][offensePlay][GAME.weightedRoll(GAME.localstance, numRoll)]
 
 def processPlay():
     finalStance = determinePriority()
@@ -48,9 +50,6 @@ def soft():
         # Soft TD
         pass
     GAME.yard += mod1+mod2
-    print mod1
-    print mod2
-    print GAME.yard
     if _rolltype(GAME.rolls['Offense'], position=-1) == "*" or _rolltype(GAME.rolls['Defense'], position=-1) == "*":
         GAME.boob = True
 
@@ -64,8 +63,6 @@ def hard(gain, result):
         GAME.yard += mod
     else:
         GAME.yard -= mod
-    print mod
-    print GAME.yard
 
 
 def incomplete(result):
@@ -83,6 +80,7 @@ def fumble(gain, result):
     else:
         GAME.yard -= (int)(result.split(" ")[1])
     GAME.toggleStance()
+    GAME.down = 1
 
 
 def qtrouble(result):

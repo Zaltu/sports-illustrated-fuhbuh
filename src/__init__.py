@@ -38,7 +38,7 @@ def weightedRoll(stance, perc):
     numProbTable = json_reader.readJson("data/dice.json")
     for sheetRoll in numProbTable[stance]:
         if numProbTable[stance][numProbTable[stance].index(sheetRoll)+1] > perc:
-            print (sheetRoll, numProbTable[stance].index(sheetRoll))
+            #print (sheetRoll, numProbTable[stance].index(sheetRoll))
             return numProbTable[stance].index(sheetRoll)
 
 
@@ -65,6 +65,7 @@ def toggleStance():
         GAME.localstance = "Offense"
     GAME.switchYardSide()
     GAME.down = 1
+    GAME.firstdown = GAME.yard+10
 
 
 GAME.clock = ['1st', 720]
