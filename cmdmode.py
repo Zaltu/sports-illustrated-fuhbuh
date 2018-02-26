@@ -24,6 +24,9 @@ for i in range(0, 10):
     GAME.localstance = "Offense"
     turnController.fullTurn()
 
+    if GAME.TD:
+        turnController.kickoff()
+
 print "Final yard: %s" % GAME.yard
 print "Final down: %s" % GAME.down
 

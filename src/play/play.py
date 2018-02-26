@@ -54,6 +54,13 @@ def soft():
         GAME.boob = True
 
 
+def softs(singlePlay):
+    mod = (int)(''.join(singlePlay.split(" ")[:2]))
+    GAME.yard += mod
+    if singlePlay[-1] == "*":
+        GAME.boob = True
+
+
 def hard(gain, result):
     mod = (int)(result.split(" ")[1])
     if mod == 100:
@@ -83,10 +90,6 @@ def fumble(gain, result):
     GAME.down = 1
 
 
-def qtrouble(result):
-    pass
-
-
 def penalty(result, towards):
     if GAME.localstance == towards:
         GAME.yard -= (int)(result.split(" ")[1])
@@ -98,9 +101,23 @@ def penalty(result, towards):
     GAME.boob = True
 
 
+def customKey(ctype, key):
+    print ctype + "!"
+    if GAME.localstance == 'Offense':
+        line = json_reader.readJson("data/teams/"+GAME.team, attribute=key)
+    else:
+        line = json_reader.readJson("data/teams/"+GAME.enemy, attribute=key)
+    print line
+    newRoll = GAME.weightedRoll('Offense', random.random()*100)
+    newPlay = line[newRoll]
+    print ctype + " roll: %s" % newPlay
+    PLAYMAP[_rolltype(newPlay)](newPlay)
+
+
+
 PLAYMAP = {
-    '+': soft,
-    '-': soft,
+    '+': softs,
+    '-': softs,
     ':+': lambda s: hard(True, s),
     ':-': lambda s: hard(False, s),
     'OFF': lambda s, t='Offense': penalty(s, towards=t),
@@ -108,9 +125,10 @@ PLAYMAP = {
     'PI': lambda s, t='Defense': penalty(s, towards=t),
     'INC': incomplete,
     ':+TD': lambda s: hard(True, s),
-    'QT': qtrouble,
+    'QT': lambda t='QT', k='QT': customKey(t, k),
     'INT': interception,
     'F+': lambda s: fumble(True, s),
     'F-': lambda s: fumble(False, s),
-    'BK-': fumble
+    'BK-': fumble,
+    'B': lambda t='Breakaway', k='Breakaway': customKey(t, k)
 }

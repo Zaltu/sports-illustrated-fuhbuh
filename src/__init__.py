@@ -19,6 +19,7 @@ def validateState():
         assert GAME.conn
         assert GAME.localstance
         assert GAME.down
+        assert not GAME.TD
     except (AssertionError, AttributeError):
         GAME.state = StateError
         return 0
@@ -76,6 +77,7 @@ GAME.conn = None # IP address or connection object for the second player
 GAME.localstance = ''
 GAME.yard = 40
 GAME.boob = False
+GAME.TD = False
 
 GAME.setTeam = setTeam
 GAME.setEnemy = setEnemy
