@@ -71,7 +71,7 @@ def toggleStance():
 
 GAME.clock = ['1st', 720]
 GAME.simplePriorityLow = ['+', '-']
-GAME.score = (0, 0) # (Me, Them)
+GAME.score = [0, 0] # (Me, Them)
 GAME.state = CoinFlip # QWidget object
 GAME.conn = None # IP address or connection object for the second player
 GAME.localstance = ''

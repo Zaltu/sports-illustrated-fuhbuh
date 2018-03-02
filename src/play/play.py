@@ -10,8 +10,14 @@ def roll(callout, offensePlay=None): # eg roll('Line Plunge')
     stats = json_reader.readJson("data/teams/"+GAME.team, attribute=GAME.localstance)
     numRoll = random.random()*100
     if not offensePlay:
+        #pp(stats)
+        #print callout
+        #print offensePlay
         GAME.rolls[GAME.localstance] = stats[callout][GAME.weightedRoll(GAME.localstance, numRoll)]
     else:
+        #pp(stats)
+        #print callout
+        #print offensePlay
         GAME.rolls[GAME.localstance] = stats[callout][offensePlay][GAME.weightedRoll(GAME.localstance, numRoll)]
 
 def processPlay():

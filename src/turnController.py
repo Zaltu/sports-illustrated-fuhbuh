@@ -1,4 +1,5 @@
 import random
+import sys as system
 from gui.liaison import notify
 import src
 from src import GAME
@@ -21,6 +22,7 @@ def turnOver():
 def clock(star):
     GAME.clock[1] -= 30 if not star else 10
     if GAME.clock[1] <= 0:
+        print "Changing quarters"
         changeQuarters()
     GAME.boob = False
 
@@ -28,10 +30,13 @@ def changeQuarters():
     GAME.clock[0] = src.QNAMES[src.QNAMES.index(GAME.clock[0])+1]
     if GAME.clock[0] == 'END':
         gameOver()
+    GAME.clock[1] = 720
 
 
 def gameOver():
-    pass
+    print "Game over"
+    print "Final score: %s to %s" % (GAME.score[0], GAME.score[1])
+    GAME.end = True
 
 
 def handleFluff():
@@ -40,11 +45,21 @@ def handleFluff():
     else:
         print "%sth and %s on the %s" % (GAME.down, GAME.firstdown-GAME.yard, GAME.yard)
 
+    print "Game time: %s" % GAME.clock
+
 
 def handleTD():
     if GAME.yard >= 100:
         print "TOUCHDOWN!"
+        handleScore()
         GAME.TD = True
+
+
+def handleScore():
+    if GAME.localstance == "Offense":
+        GAME.score[0] += 7
+    else:
+        GAME.score[1] += 7
 
 
 def handleDowns():
@@ -62,7 +77,7 @@ def handleDowns():
 
 def fullTurn():
     handleFluff()
-    play.roll(GAME.callout)
+    play.roll(GAME.callout, offensePlay=GAME.into if GAME.localstance == "Defense" else None)
     play.processPlay()
     print GAME.rolls
     handleDowns()

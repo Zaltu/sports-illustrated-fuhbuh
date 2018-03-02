@@ -11,26 +11,54 @@ GAME.setEnemy('raiders.json')
 GAME.turn = "dummy"
 GAME.down = 1
 GAME.callout = 'End Run'
+GAME.into = "End Run"
 GAME.rolls = {}
+GAME.localstance = "Offense"
+GAME.end = False
 
 GAME.validateState()
 
 GAME.firstdown = 50
 
-for i in range(0, 10):
-    GAME.localstance = "Defense"
-    play.roll("Standard", offensePlay=GAME.callout)
+def fullGame():
+    for i in range(0, 150):
 
-    GAME.localstance = "Offense"
-    turnController.fullTurn()
+        if GAME.localstance == "Offense":
+            GAME.localstance = "Defense"
+            play.roll("Standard", offensePlay=GAME.into)
 
-    if GAME.TD:
-        turnController.kickoff()
+            GAME.callout = "End Run"
+            GAME.localstance = "Offense"
+            turnController.fullTurn()
+        else:
+            GAME.localstance = "Offense"
+            play.roll("End Run")
 
-print "Final yard: %s" % GAME.yard
-print "Final down: %s" % GAME.down
+            GAME.callout = "Standard"
+            GAME.localstance = "Defense"
+            turnController.fullTurn()
 
 
+        if GAME.TD:
+            turnController.kickoff()
+
+    print "Final yard: %s" % GAME.yard
+    print "Final down: %s" % GAME.down
+
+
+errors = []
+for i in range(0, 100000):
+    try:
+        GAME.down = 1
+        GAME.yard = 40
+        GAME.firstdown = 50
+        GAME.clock = ["1st", 720]
+        GAME.end = False
+        fullGame()
+    except Exception as e:
+        errors.append(e)
+
+pp(errors)
 
 #i = random.random()*100
 #print i
