@@ -1,11 +1,11 @@
 from libs.namespace import Namespace
 from libs import json_reader
-from src.play import play
 from gui.sub.coinflip import CoinFlip
 from gui.sub.stateerror import StateError
 
 
 STANCES = ['Offense', 'Defense', 'Kick']
+QNAMES = ['1st', '2nd', '3rd', '4th', 'END']
 GAME = Namespace()
 
 def validateState():
@@ -18,7 +18,9 @@ def validateState():
         assert GAME.score
         assert GAME.conn
         assert GAME.localstance
-    except AssertionError:
+        assert GAME.down
+        assert not GAME.TD
+    except (AssertionError, AttributeError):
         GAME.state = StateError
         return 0
     return 1
@@ -34,53 +36,48 @@ A = [
     ]
 """
 def weightedRoll(stance, perc):
-    numProbTable = json_reader.readJSON("NumProb.json")
+    numProbTable = json_reader.readJson("data/dice.json")
     for sheetRoll in numProbTable[stance]:
-        if numProbTable[stance][numProbTable[stance].index(sheetRoll)+1][0] > perc:
-            return sheetRoll[0]
+        if numProbTable[stance][numProbTable[stance].index(sheetRoll)+1] > perc:
+            #print (sheetRoll, numProbTable[stance].index(sheetRoll))
+            return numProbTable[stance].index(sheetRoll)
 
 
 def setTeam(team):
     GAME.team = team
 
+
 def setEnemy(team):
     GAME.enemy = team
+
 
 def setState(state):
     GAME.state = state
 
+
 def switchYardSide():
     GAME.yard = 100 - GAME.yard
 
+
 def toggleStance():
-    if GAME.localstance == "Attack" or GAME.localstance == "Kick":
+    if GAME.localstance == "Offense" or GAME.localstance == "Kick":
         GAME.localstance = "Defense"
     else:
-        GAME.localstance = "Attack"
+        GAME.localstance = "Offense"
     GAME.switchYardSide()
+    GAME.down = 1
+    GAME.firstdown = GAME.yard+10
 
 
 GAME.clock = ['1st', 720]
 GAME.simplePriorityLow = ['+', '-']
-GAME.score = (0, 0) # (Me, Them)
+GAME.score = [0, 0] # (Me, Them)
 GAME.state = CoinFlip # QWidget object
 GAME.conn = None # IP address or connection object for the second player
 GAME.localstance = ''
 GAME.yard = 40
-
-GAME.playmap = {
-    '+': play.soft,
-    '-': play.soft,
-    ':+': play.hard,
-    ':-': play.hard,
-    'OP': lambda f, t='OP': play.penalty(towards=t, fromStance=f),
-    'DF': lambda f, t='DF': play.penalty(towards=t, fromStance=f),
-    'PI': lambda f, t='PI': play.penalty(towards=t, fromStance=f),
-    '0': play.incomplete,
-    ':TD': play.hard,
-    'QT': play.qtrouble,
-    'INT': play.intercept
-}
+GAME.boob = False
+GAME.TD = False
 
 GAME.setTeam = setTeam
 GAME.setEnemy = setEnemy
@@ -88,3 +85,4 @@ GAME.setState = setState
 GAME.weightedRoll = weightedRoll
 GAME.switchYardSide = switchYardSide
 GAME.toggleStance = toggleStance
+GAME.validateState = validateState
