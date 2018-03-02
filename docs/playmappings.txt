@@ -1,0 +1,22 @@
+Play mappings:
+ + (INT)	-> soft gain (set '+ 0' for no gain, '+ TD' for TD and '+ B' for Breakaway)
+ - (INT)	-> soft loss
+ :+ (INT)	-> hard gain (set ':+ TD' for hard touchdown)
+ :- (INT)	-> hard loss
+ OP (INT)	-> Offensive penalty yards
+ DF (INT)	-> Defensinve penalty yards
+ PI (INT)	-> Pass interference yards
+ 0			-> Incomplete pass
+ QT			-> Quarterback trapped
+ INT (INT)	-> Interception yards
+ F+ (INT)	-> Fumble yards gained
+ F- (INT)	-> Fumble yards lost
+ BK- (INT)	-> Blocked Kick yards lost
+
+ Append " *" for out of bounds designation.
+
+
+
+
+ for a neutral fumble, you need to put "F+ 0"
+ there needs to be a space between "+ TD"
