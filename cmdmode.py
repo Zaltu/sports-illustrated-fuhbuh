@@ -1,6 +1,8 @@
 # CMD play for testing
 from pprint import pprint as pp
 import random
+import sys
+import traceback
 from src import GAME
 from src import turnController
 from src.play import play
@@ -42,24 +44,31 @@ def fullGame():
         if GAME.TD:
             turnController.kickoff()
 
+        if GAME.end:
+            break
+
     print "Final yard: %s" % GAME.yard
     print "Final down: %s" % GAME.down
 
 
-errors = []
-for i in range(0, 100000):
-    try:
-        GAME.down = 1
-        GAME.yard = 40
-        GAME.firstdown = 50
-        GAME.clock = ["1st", 720]
-        GAME.end = False
-        fullGame()
-    except Exception as e:
-        errors.append(e)
+def heavyTest():
+    errors = []
+    for i in range(0, 100000):
+        try:
+            GAME.down = 1
+            GAME.yard = 40
+            GAME.firstdown = 50
+            GAME.clock = ["1st", 720]
+            GAME.end = False
+            GAME.score = [0, 0]
+            fullGame()
+        except Exception as e:
+            traceback.print_exc()
+            sys.exit(0)
+            errors.append(traceback.format_exc())
 
-pp(errors)
+    pp(errors)
 
-#i = random.random()*100
-#print i
-#print GAME.weightedRoll("Attack", i)
+
+#fullGame()
+heavyTest()

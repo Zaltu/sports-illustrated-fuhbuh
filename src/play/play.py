@@ -4,6 +4,7 @@ from libs import json_reader
 from src import GAME
 
 
+FUMBLE_CHANCE_FIELD = "FUMBLE_CHANCE"
 
 
 def roll(callout, offensePlay=None): # eg roll('Line Plunge')
@@ -50,32 +51,34 @@ def _rolltype(rollRes, position=0):
 These represent all the different play types that can occur and their resolves.
 """
 def soft():
-    mod1 = (int)(''.join(GAME.rolls["Defense"].split(" ")[:2]))
-    mod2 = (int)(''.join(GAME.rolls["Offense"].split(" ")[:2]))
-    if mod2 == 100:
+    mod1 = (''.join(GAME.rolls["Defense"].split(" ")[:2]))
+    mod2 = (''.join(GAME.rolls["Offense"].split(" ")[:2]))
+    if mod2 == "+TD" or mod1 == "+TD":
         # Soft TD
         pass
-    GAME.yard += mod1+mod2
+    else:
+        GAME.yard += (int)(mod1)+(int)(mod2)
     if _rolltype(GAME.rolls['Offense'], position=-1) == "*" or _rolltype(GAME.rolls['Defense'], position=-1) == "*":
         GAME.boob = True
 
 
 def softs(singlePlay):
-    mod = (int)(''.join(singlePlay.split(" ")[:2]))
-    GAME.yard += mod
+    mod = (''.join(singlePlay.split(" ")[:2]))
+    if mod == "+TD":
+        GAME.TD = True
+        GAME.yard = 100
+    else:
+        GAME.yard += (int)(mod)
     if singlePlay[-1] == "*":
         GAME.boob = True
 
 
-def hard(gain, result):
+def hard(result):
     mod = (int)(result.split(" ")[1])
-    if mod == 100:
+    if mod == "+TD":
         # Force TD
         pass
-    if gain:
-        GAME.yard += mod
-    else:
-        GAME.yard -= mod
+    GAME.yard += mod
 
 
 def incomplete(result):
@@ -87,11 +90,17 @@ def interception(result):
     GAME.toggleStance()
 
 
-def fumble(gain, result):
-    if gain:
-        GAME.yard += (int)(result.split(" ")[1])
+def fumble(result):
+    if GAME.localstance == "Offense":
+        fum = json_reader.readJson("data/teams/"+GAME.team, attribute=FUMBLE_CHANCE_FIELD)
     else:
-        GAME.yard -= (int)(result.split(" ")[1])
+        fum = json_reader.readJson("data/teams/"+GAME.enemy, attribute=FUMBLE_CHANCE_FIELD)
+    GAME.yard += (int)(result.split(" ")[1])
+    roll = random.random()*100
+    if roll <= fum:
+        print "Fumble recovered!"
+        return
+    print "Fumble lost!"
     GAME.toggleStance()
     GAME.down = 1
 
@@ -124,17 +133,14 @@ def customKey(ctype, key):
 PLAYMAP = {
     '+': softs,
     '-': softs,
-    ':+': lambda s: hard(True, s),
-    ':-': lambda s: hard(False, s),
-    'OFF': lambda s, t='Offense': penalty(s, towards=t),
-    'DEF': lambda s, t='Defense': penalty(s, towards=t),
-    'PI': lambda s, t='Defense': penalty(s, towards=t),
+    ':': lambda r: hard(True, r),
+    'OFF': lambda r: penalty(r, towards="Offense"),
+    'DEF': lambda r: penalty(r, towards="Defense"),
+    'PI': lambda r: penalty(r, towards="Defense"),
     'INC': incomplete,
-    ':+TD': lambda s: hard(True, s),
-    'QT': lambda t='QT', k='QT': customKey(t, k),
+    'QT': lambda r: customKey("QT", "QT"),
     'INT': interception,
-    'F+': lambda s: fumble(True, s),
-    'F-': lambda s: fumble(False, s),
-    'BK-': fumble,
-    'B': lambda t='Breakaway', k='Breakaway': customKey(t, k)
+    'F': lambda r: fumble(r),
+    'BK': fumble,
+    'B': lambda r: customKey("Breakaway", "Breakaway")
 }
