@@ -39,8 +39,6 @@ def determinePriority():
         return 'Offense'
     else:
         return None
-    # TODO Resolve down
-    # TODO Resolve clock
 
 
 def _rolltype(rollRes, position=0):
@@ -54,8 +52,8 @@ def soft():
     mod1 = (''.join(GAME.rolls["Defense"].split(" ")[:2]))
     mod2 = (''.join(GAME.rolls["Offense"].split(" ")[:2]))
     if mod2 == "+TD" or mod1 == "+TD":
-        # Soft TD
-        pass
+        GAME.yard = 100
+        GAME.TD = True
     else:
         GAME.yard += (int)(mod1)+(int)(mod2)
     if _rolltype(GAME.rolls['Offense'], position=-1) == "*" or _rolltype(GAME.rolls['Defense'], position=-1) == "*":
@@ -65,7 +63,6 @@ def soft():
 def softs(singlePlay):
     mod = (''.join(singlePlay.split(" ")[:2]))
     if mod == "+TD":
-        GAME.TD = True
         GAME.yard = 100
     else:
         GAME.yard += (int)(mod)
@@ -74,15 +71,16 @@ def softs(singlePlay):
 
 
 def hard(result):
-    mod = (int)(result.split(" ")[1])
+    mod = result.split(" ")[1]
     if mod == "+TD":
-        # Force TD
-        pass
-    GAME.yard += mod
+        GAME.yard = 100
+        return
+    GAME.yard += (int)(mod)
 
 
 def incomplete(result):
-    pass
+    # Incomplete is always considered oob
+    GAME.boob = True
 
 
 def interception(result):
@@ -105,8 +103,8 @@ def fumble(result):
     GAME.down = 1
 
 
-def penalty(result, towards):
-    if GAME.localstance == towards:
+def penalty(result, gain):
+    if not gain:
         GAME.yard -= (int)(result.split(" ")[1])
     else:
         GAME.yard += (int)(result.split(" ")[1])
@@ -133,10 +131,10 @@ def customKey(ctype, key):
 PLAYMAP = {
     '+': softs,
     '-': softs,
-    ':': lambda r: hard(True, r),
-    'OFF': lambda r: penalty(r, towards="Offense"),
-    'DEF': lambda r: penalty(r, towards="Defense"),
-    'PI': lambda r: penalty(r, towards="Defense"),
+    ':': lambda r: hard(r),
+    'OFF': lambda r: penalty(r, False),
+    'DEF': lambda r: penalty(r, True),
+    'PI': lambda r: penalty(r, True),
     'INC': incomplete,
     'QT': lambda r: customKey("QT", "QT"),
     'INT': interception,

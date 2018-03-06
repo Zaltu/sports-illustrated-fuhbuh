@@ -22,24 +22,30 @@ GAME.validateState()
 
 GAME.firstdown = 50
 
+ALL_D = ["Standard", "Short Yardage", "Spread", "Pass Prevent Short", "Pass Prevent Long", "Blitz"]  # 6
+ALL_A = ["Line Plunge", "Off Tackle", "End Run", "Draw", "Screen", "Short", "Medium", "Long", "Sideline"]  # 9
+
 def fullGame():
     for i in range(0, 150):
 
         if GAME.localstance == "Offense":
             GAME.localstance = "Defense"
-            play.roll("Standard", offensePlay=GAME.into)
+            GAME.defplay = ALL_D[random.randint(0, 5)]
+            play.roll(GAME.defplay, offensePlay=GAME.into)
 
-            GAME.callout = "End Run"
+            GAME.callout = ALL_A[random.randint(0, 8)]
+            GAME.offplay = GAME.callout
             GAME.localstance = "Offense"
             turnController.fullTurn()
         else:
             GAME.localstance = "Offense"
-            play.roll("End Run")
+            GAME.offplay = ALL_A[random.randint(0, 8)]
+            play.roll(GAME.offplay)
 
-            GAME.callout = "Standard"
+            GAME.callout = ALL_D[random.randint(0, 5)]
+            GAME.defplay = GAME.callout
             GAME.localstance = "Defense"
             turnController.fullTurn()
-
 
         if GAME.TD:
             turnController.kickoff()
@@ -70,5 +76,5 @@ def heavyTest():
     pp(errors)
 
 
-#fullGame()
-heavyTest()
+fullGame()
+#heavyTest()

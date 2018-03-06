@@ -2,14 +2,12 @@ import random
 import sys as system
 from gui.liaison import notify
 import src
-from src import GAME
+from src import GAME, QNAMES
 from src.play import play
+
 
 def graphicDispatch():
     notify()
-
-def downChange():
-    GAME.down += 1
 
 
 def turnOver():
@@ -40,12 +38,17 @@ def gameOver():
 
 
 def handleFluff():
+    print ""
     if GAME.firstdown >= 100:
-        print "%sth and goal on the %s" % (GAME.down, GAME.yard)
+        print "%s and goal on the %s" % (QNAMES[GAME.down-1], GAME.yard)
     else:
-        print "%sth and %s on the %s" % (GAME.down, GAME.firstdown-GAME.yard, GAME.yard)
+        print "%s and %s on the %s" % (QNAMES[GAME.down-1], GAME.firstdown-GAME.yard, GAME.yard)
 
     print "Game time: %s" % GAME.clock
+
+def handleFluffCall():
+    print "Offense callout: %s -> %s" % (GAME.offplay, GAME.rolls['Offense'])
+    print "Defense callout: %s -> %s" % (GAME.defplay, GAME.rolls['Defense'])
 
 
 def handleTD():
@@ -70,26 +73,37 @@ def handleDowns():
         GAME.down = 1
         GAME.firstdown = GAME.yard + 10
     else:
-        downChange()
+        GAME.down += 1
     if GAME.down == 5:
         turnOver()
 
 
 def fullTurn():
-    handleFluff()
+    handleFluff()  # Only for CMD mode
     play.roll(GAME.callout, offensePlay=GAME.into if GAME.localstance == "Defense" else None)
+    handleFluffCall()  # Only for CMD mode
     play.processPlay()
-    print GAME.rolls
     handleDowns()
     handleTD()
     clock(GAME.boob)
+    graphicDispatch()
 
 
 def kickoff():
+    print ""  # Only for CMD mode
     GAME.TD = False
     GAME.yard = 40
     play.customKey('Kickoff', 'Kickoff')
     GAME.toggleStance()
     play.customKey('Kickoff Return', 'Kickoff Return')
     GAME.firstdown = GAME.yard + 10
+    GAME.down = 1
+
+
+def punt():
+    play.customKey('Punt', 'Punt')
+    GAME.toggleStance()
+    play.customKey('Punt Return', 'Punt Return')
+    GAME.firstdown = GAME.yard + 10
+    GAME.down = 1
     handleFluff()
