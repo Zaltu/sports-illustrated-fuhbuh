@@ -17,6 +17,7 @@ GAME.into = "End Run"
 GAME.rolls = {}
 GAME.localstance = "Offense"
 GAME.end = False
+GAME.startingstance = "Offense"
 
 GAME.validateState()
 

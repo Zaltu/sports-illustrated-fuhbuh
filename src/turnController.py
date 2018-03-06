@@ -11,16 +11,16 @@ def graphicDispatch():
 
 
 def turnOver():
-    print "Switched sides!"
+    print "Switched sides!"  # Only for CMD mode
     GAME.down = 1
     GAME.toggleStance()
-    print "Offense is now on the %s yard line." % GAME.yard
+    print "Offense is now on the %s yard line." % GAME.yard  # Only for CMD mode
 
 
 def clock(star):
     GAME.clock[1] -= 30 if not star else 10
     if GAME.clock[1] <= 0:
-        print "Changing quarters"
+        print "Changing quarters"  # Only for CMD mode
         changeQuarters()
     GAME.boob = False
 
@@ -29,11 +29,16 @@ def changeQuarters():
     if GAME.clock[0] == 'END':
         gameOver()
     GAME.clock[1] = 720
+    if GAME.clock[0] == src.QNAMES[2]:
+        print "Halftime!"
+        if GAME.startingstance == "Offense" and GAME.localstance == "Offense":
+            GAME.toggleStance()
+        kickoff()
 
 
 def gameOver():
-    print "Game over"
-    print "Final score: %s to %s" % (GAME.score[0], GAME.score[1])
+    print "Game over"  # Only for CMD mode
+    print "Final score: %s to %s" % (GAME.score[0], GAME.score[1])  # Only for CMD mode
     GAME.end = True
 
 
@@ -53,7 +58,7 @@ def handleFluffCall():
 
 def handleTD():
     if GAME.yard >= 100:
-        print "TOUCHDOWN!"
+        print "TOUCHDOWN!"  # Only for CMD mode
         handleScore()
         GAME.TD = True
 
@@ -69,7 +74,7 @@ def handleDowns():
     if GAME.yard >= 100:  # TD
         return
     if GAME.yard >= GAME.firstdown:
-        print "First Down!"
+        print "First Down!"  # Only for CMD mode
         GAME.down = 1
         GAME.firstdown = GAME.yard + 10
     else:
