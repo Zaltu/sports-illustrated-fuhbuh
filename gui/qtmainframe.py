@@ -1,5 +1,5 @@
 from PySide.QtGui import QWidget, QGridLayout, QLayout, QDesktopWidget
-from gui.sub.homescreen import HomeScreen
+from gui.sub.headerwidget import Header
 from src import validateState, GAME
 
 
@@ -12,10 +12,10 @@ class MainFrame(QWidget):
         self.setAutoFillBackground(True)
         self.layout = QGridLayout(self)
         self.setLayout(self.layout)
-        self.currentWidget = HomeScreen(self)
+        self.currentWidget = Header(self)
         self.setPalette(self.currentWidget.palette())
         self.layout.addWidget(self.currentWidget, 0, 0, 2, 2)
-        self.layout.setSizeConstraint(QLayout.SetFixedSize)
+        #self.layout.setSizeConstraint(QLayout.SetFixedSize)
         self.currentWidget.show()
         self.show()
         self.raise_()

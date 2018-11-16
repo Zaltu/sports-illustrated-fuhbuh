@@ -15,7 +15,7 @@ class HomeScreen(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.mainframe.setWindowTitle("1972 Sports Illustrated Football")
+        self.parent.setWindowTitle("1972 Sports Illustrated Football")
 
         self.grid = QGridLayout()
         self.setLayout(self.grid)
