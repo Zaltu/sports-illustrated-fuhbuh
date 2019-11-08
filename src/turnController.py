@@ -1,7 +1,5 @@
 import random
-import sys as system
 from gui.liaison import notify
-import src
 from src import GAME, QNAMES
 from src.play import play
 
@@ -25,11 +23,11 @@ def clock(star):
     GAME.boob = False
 
 def changeQuarters():
-    GAME.clock[0] = src.QNAMES[src.QNAMES.index(GAME.clock[0])+1]
+    GAME.clock[0] = QNAMES[QNAMES.index(GAME.clock[0])+1]
     if GAME.clock[0] == 'END':
         gameOver()
     GAME.clock[1] = 720
-    if GAME.clock[0] == src.QNAMES[2]:
+    if GAME.clock[0] == QNAMES[2]:
         print("Halftime!")
         if GAME.startingstance == "Offense" and GAME.localstance == "Offense":
             GAME.toggleStance()
