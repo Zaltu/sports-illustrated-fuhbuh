@@ -11,16 +11,16 @@ def graphicDispatch():
 
 
 def turnOver():
-    print "Switched sides!"  # Only for CMD mode
+    print("Switched sides!")  # Only for CMD mode
     GAME.down = 1
     GAME.toggleStance()
-    print "Offense is now on the %s yard line." % GAME.yard  # Only for CMD mode
+    print("Offense is now on the %s yard line." % GAME.yard)  # Only for CMD mode
 
 
 def clock(star):
     GAME.clock[1] -= 30 if not star else 10
     if GAME.clock[1] <= 0:
-        print "Changing quarters"  # Only for CMD mode
+        print("Changing quarters")  # Only for CMD mode
         changeQuarters()
     GAME.boob = False
 
@@ -30,35 +30,35 @@ def changeQuarters():
         gameOver()
     GAME.clock[1] = 720
     if GAME.clock[0] == src.QNAMES[2]:
-        print "Halftime!"
+        print("Halftime!")
         if GAME.startingstance == "Offense" and GAME.localstance == "Offense":
             GAME.toggleStance()
         kickoff()
 
 
 def gameOver():
-    print "Game over"  # Only for CMD mode
-    print "Final score: %s to %s" % (GAME.score[0], GAME.score[1])  # Only for CMD mode
+    print("Game over")  # Only for CMD mode
+    print("Final score: %s to %s" % (GAME.score[0], GAME.score[1]))  # Only for CMD mode
     GAME.end = True
 
 
 def handleFluff():
-    print ""
+    print("")
     if GAME.firstdown >= 100:
-        print "%s and goal on the %s" % (QNAMES[GAME.down-1], GAME.yard)
+        print("%s and goal on the %s" % (QNAMES[GAME.down-1], GAME.yard))
     else:
-        print "%s and %s on the %s" % (QNAMES[GAME.down-1], GAME.firstdown-GAME.yard, GAME.yard)
+        print("%s and %s on the %s" % (QNAMES[GAME.down-1], GAME.firstdown-GAME.yard, GAME.yard))
 
-    print "Game time: %s" % GAME.clock
+    print("Game time: %s" % GAME.clock)
 
 def handleFluffCall():
-    print "Offense callout: %s -> %s" % (GAME.offplay, GAME.rolls['Offense'])
-    print "Defense callout: %s -> %s" % (GAME.defplay, GAME.rolls['Defense'])
+    print("Offense callout: %s -> %s" % (GAME.offplay, GAME.rolls['Offense']))
+    print("Defense callout: %s -> %s" % (GAME.defplay, GAME.rolls['Defense']))
 
 
 def handleTD():
     if GAME.yard >= 100:
-        print "TOUCHDOWN!"  # Only for CMD mode
+        print("TOUCHDOWN!")  # Only for CMD mode
         handleScore()
         GAME.TD = True
 
@@ -74,7 +74,7 @@ def handleDowns():
     if GAME.yard >= 100:  # TD
         return
     if GAME.yard >= GAME.firstdown:
-        print "First Down!"  # Only for CMD mode
+        print("First Down!")  # Only for CMD mode
         GAME.down = 1
         GAME.firstdown = GAME.yard + 10
     else:
@@ -95,7 +95,7 @@ def fullTurn():
 
 
 def kickoff():
-    print ""  # Only for CMD mode
+    print("")  # Only for CMD mode
     GAME.TD = False
     GAME.yard = 40
     play.customKey('Kickoff', 'Kickoff')

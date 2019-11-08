@@ -96,9 +96,9 @@ def fumble(result):
     GAME.yard += (int)(result.split(" ")[1])
     roll = random.random()*100
     if roll <= fum:
-        print "Fumble recovered!"
+        print("Fumble recovered!")
         return
-    print "Fumble lost!"
+    print("Fumble lost!")
     GAME.toggleStance()
     GAME.down = 1
 
@@ -115,15 +115,15 @@ def penalty(result, gain):
 
 
 def customKey(ctype, key):
-    print ctype + "!"
+    print(ctype + "!")
     if GAME.localstance == 'Offense':
         line = json_reader.readJson("data/teams/"+GAME.team, attribute=key)
     else:
         line = json_reader.readJson("data/teams/"+GAME.enemy, attribute=key)
-    print line
+    print(line)
     newRoll = GAME.weightedRoll('Offense', random.random()*100)
     newPlay = line[newRoll]
-    print ctype + " roll: %s" % newPlay
+    print(ctype + " roll: %s" % newPlay)
     PLAYMAP[_rolltype(newPlay)](newPlay)
 
 
