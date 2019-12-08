@@ -7,8 +7,8 @@
             "Screen": ["DEF 15", "OFF 15", "+ 1", "+ 5", "+ 15 *", "+ 40", "QT", "+ 8", "DEF 5", "+ 5", "- 1 *", "+ 8", "OFF 5", "+ 14", "+ 11", "+ 8", "PI -4", "- 3 *", "+ 1", "F -3", "+ 18", "- 6", "- 1", "- 2", "INC", "INC", "+ 13", "+ 3", "- 10", "+ 12"],
             "Short": ["DEF 5", "OFF 5", "OFF 15", "+ 5", "+ 2", "+ 6 *", "- 5", "DEF 15", "+ 17", "PI +7", "+ 0", "+ 5", "+ 4", "INT +6", "INC", "INC", "+ 8", "+ 3", "QT", "F +5", "+ 8", "+ 7", "+ 9", "+ 7", "INC", "INC", "INC", "+ 9", "+ 8", "+ 10"],
             "Medium": ["OFF 5", "PI +15", "+ 20", "+ 17", "+ 11", "+ 18", "INT +17", "DEF 15", "DEF 5", "+ 30", "+ 10", "+ 11", "+ 19", "OFF 15", "+ 15", "+ 12", "+ 13", "+ 18", "DEF 15", "F +13", "INC", "QT", "INC", "INC", "INC", "INC", "INC", "+ 14 *", "INT +13", "+ TD"],
-            "Long": ["INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC"],
-            "Sideline": ["INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC"]
+            "Long": ["DEF 5", "OFF 5", "OFF 15", "PI +37", "+ 40", "+ 33 *", "+ 26", "DEF 15", "+ 20", "+ 39 *", "+ 28", "+ 50", "QT", "INT +43", "OFF 15", "+ 22", "INC", "+ 36", "INT +22", "F +31", "+ TD", "QT", "INC", "INC", "INC", "INC", "INC", "+ 24", "+ 27 *", "+ 34"],
+            "Sideline": ["DEF 15", "OFF 15", "PI +31", "+ 9", "+ 2 *", "+ 14 *", "+ 10 *", "OFF 5", "DEF 5", "+ 18 *", "+ 7 *", "+ 9 *", "QT", "+ 13 *", "PI +10", "+ 17 *", "+ 4", "INC", "+ 7 *", "F +6", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC", "INC"]
         },
     "Defense": {
             "Standard": {
