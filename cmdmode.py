@@ -54,8 +54,8 @@ def fullGame():
         if GAME.end:
             break
 
-    print "Final yard: %s" % GAME.yard
-    print "Final down: %s" % GAME.down
+    print("Final yard: %s" % GAME.yard)
+    print("Final down: %s" % GAME.down)
 
 
 def heavyTest():

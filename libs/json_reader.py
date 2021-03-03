@@ -30,5 +30,5 @@ def readJson(filename, attribute=None):
             return data[attribute]
         return data
     except IOError as ioerror:
-        print ioerror
+        print(ioerror)
         return 1

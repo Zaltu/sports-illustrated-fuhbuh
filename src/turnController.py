@@ -1,11 +1,7 @@
 import random
-from gui.liaison import notify
 from src import GAME, QNAMES
 from src.play import play
 
-
-def graphicDispatch():
-    notify()
 
 
 def turnOver():
@@ -89,7 +85,6 @@ def fullTurn():
     handleDowns()
     handleTD()
     clock(GAME.boob)
-    graphicDispatch()
 
 
 def kickoff():

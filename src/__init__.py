@@ -1,8 +1,5 @@
 from libs.namespace import Namespace
 from libs import json_reader
-from gui.sub.coinflip import CoinFlip
-from gui.sub.stateerror import StateError
-
 
 STANCES = ['Offense', 'Defense', 'Kick']
 QNAMES = ['1st', '2nd', '3rd', '4th', 'END']
@@ -21,7 +18,7 @@ def validateState():
         assert GAME.down
         assert not GAME.TD
     except (AssertionError, AttributeError):
-        GAME.state = StateError
+        GAME.state = "Error"
         return 0
     return 1
 
@@ -72,7 +69,7 @@ def toggleStance():
 GAME.clock = ['1st', 720]
 GAME.simplePriorityLow = ['+', '-']
 GAME.score = [0, 0] # (Me, Them)
-GAME.state = CoinFlip # QWidget object
+GAME.state = "CoinFlip" # QWidget object
 GAME.conn = None # IP address or connection object for the second player
 GAME.localstance = ''
 GAME.yard = 40
