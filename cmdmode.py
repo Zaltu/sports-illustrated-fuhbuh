@@ -20,7 +20,7 @@ def fullGame():
     Q.connect(None, "raiders")
 
     while not GAME.end:
-        if GAME.localstance == "Offense":
+        if Q.player1.localstance == "Offense":
             Q.player1.makeCall(ALL_A[random.randint(0, 8)])
             Q.player2.makeCall(ALL_D[random.randint(0, 5)])
         else:
