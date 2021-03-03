@@ -115,7 +115,7 @@ class FuhbuhQueue():
             GAME.defplay = call
             if GAME.offplay:
                 play.roll(GAME.defplay, "Defense", offensePlay=GAME.offplay)
-        
+
         if GAME.defplay and GAME.offplay:
             turnController.fullTurn()
 

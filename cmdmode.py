@@ -11,6 +11,9 @@ ALL_D = ["Standard", "Short Yardage", "Spread", "Pass Prevent Short", "Pass Prev
 ALL_A = ["Line Plunge", "Off Tackle", "End Run", "Draw", "Screen", "Short", "Medium", "Long", "Sideline"]  # 9
 
 def fullGame():
+    """
+    Test one full game of fuhbuh, from first kickoff to touchdown.
+    """
     Q = queue.FuhbuhQueue()
 
     Q.connect(None, "raiders")
@@ -33,11 +36,15 @@ def fullGame():
     print("Final down: %s" % GAME.down)
 
 def heavyTest():
+    """
+    Perform a more intensive error testing by executing 100000 full games.
+    Takes a while, and it prints everything...
+    """
     errors = []
-    for i in range(0, 100000):
+    while range(0, 100000):
         try:
             fullGame()
-        except Exception as e:
+        except:  #pylint: disable=bare-except
             traceback.print_exc()
             sys.exit(0)
             errors.append(traceback.format_exc())

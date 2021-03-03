@@ -1,3 +1,6 @@
+"""
+The GAME state. Who knows why I thought organizing it like this would be a good idea.
+"""
 from libs.namespace import Namespace
 from libs import json_reader
 
@@ -6,6 +9,12 @@ QNAMES = ['1st', '2nd', '3rd', '4th', 'END']
 GAME = Namespace()
 
 def validateState():
+    """
+    *Why isn't this just a bool?
+    Validate that the state of the GAME contains what we need in order to start playing.
+    :returns: 1 for yes, 0 for no
+    :rtype: int
+    """
     try:
         assert GAME.team
         assert GAME.enemy
@@ -23,23 +32,30 @@ def validateState():
     return 1
 
 
-"""
-A = [
-        (10,    ),
-        (20,    ),
-        (30,    ),
-        (40,    ),
-        ...
-    ]
-"""
 def weightedRoll(stance, perc):
+    """
+    Roll the dice, based on the probability weight table found in dice.json
+    JSON structur resembles:
+        A = [
+                (10,    ),
+                (20,    ),
+                (30,    ),
+                (40,    ),
+                ...
+        ]
+    :param str stance: stance being rolled
+    :param int perc: 1d100 rolled
+    :returns: the dice number rolled, per fuhbuh rules
+    :rtype: int
+    """
     numProbTable = json_reader.readJson("dice")
     for sheetRoll in numProbTable[stance]:
         if numProbTable[stance][numProbTable[stance].index(sheetRoll)+1] > perc:
             #print (sheetRoll, numProbTable[stance].index(sheetRoll))
             return numProbTable[stance].index(sheetRoll)
 
-
+#pylint: disable=missing-function-docstring
+# Setters
 def setTeam(team):
     GAME.team = team
 
@@ -54,9 +70,12 @@ def setState(state):
 
 def switchYardSide():
     GAME.yard = 100 - GAME.yard
-
+#pylint: enable=missing-function-docstring
 
 def toggleStance():
+    """
+    Toggles the localstance value, and everything that entails (switching the yards and setting the downs).
+    """
     if GAME.localstance == "Offense" or GAME.localstance == "Kick":
         GAME.localstance = "Defense"
     else:
