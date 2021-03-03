@@ -79,12 +79,14 @@ def handleDowns():
 
 def fullTurn():
     handleFluff()  # Only for CMD mode
-    play.roll(GAME.callout, offensePlay=GAME.into if GAME.localstance == "Defense" else None)
+    #play.roll(GAME.callout, GAME.localstance, offensePlay=GAME.offplay if GAME.localstance == "Defense" else None)
     handleFluffCall()  # Only for CMD mode
     play.processPlay()
     handleDowns()
     handleTD()
     clock(GAME.boob)
+    GAME.offplay = None
+    GAME.defplay = None
 
 
 def kickoff():

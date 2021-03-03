@@ -11,9 +11,7 @@ def buildPath(fileName):
     :return: state-dependant filepath
     :rtype: string
     """
-    if getattr(sys, 'frozen', False):
-        return os.path.join(os.path.dirname(sys.executable), str(fileName))
-    return fileName
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "../", "data/", "teams", fileName+".json"))
 
 
 def writeJson(filename, data):

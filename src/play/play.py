@@ -7,19 +7,19 @@ from src import GAME
 FUMBLE_CHANCE_FIELD = "FUMBLE_CHANCE"
 
 
-def roll(callout, offensePlay=None): # eg roll('Line Plunge')
-    stats = json_reader.readJson("data/teams/"+GAME.team, attribute=GAME.localstance)
+def roll(callout, stance, offensePlay=None): # eg roll('Line Plunge')
+    stats = json_reader.readJson(GAME.team, attribute=stance)
     numRoll = random.random()*100
-    if not offensePlay:
+    if stance == "Offense":
         #pp(stats)
         #print callout
         #print offensePlay
-        GAME.rolls[GAME.localstance] = stats[callout][GAME.weightedRoll(GAME.localstance, numRoll)]
+        GAME.rolls[stance] = stats[callout][GAME.weightedRoll(stance, numRoll)]
     else:
         #pp(stats)
         #print callout
         #print offensePlay
-        GAME.rolls[GAME.localstance] = stats[callout][offensePlay][GAME.weightedRoll(GAME.localstance, numRoll)]
+        GAME.rolls[stance] = stats[callout][offensePlay][GAME.weightedRoll(stance, numRoll)]
 
 def processPlay():
     finalStance = determinePriority()
@@ -90,9 +90,9 @@ def interception(result):
 
 def fumble(result):
     if GAME.localstance == "Offense":
-        fum = json_reader.readJson("data/teams/"+GAME.team, attribute=FUMBLE_CHANCE_FIELD)
+        fum = json_reader.readJson(GAME.team, attribute=FUMBLE_CHANCE_FIELD)
     else:
-        fum = json_reader.readJson("data/teams/"+GAME.enemy, attribute=FUMBLE_CHANCE_FIELD)
+        fum = json_reader.readJson(GAME.enemy, attribute=FUMBLE_CHANCE_FIELD)
     GAME.yard += (int)(result.split(" ")[1])
     roll = random.random()*100
     if roll <= fum:
@@ -117,9 +117,9 @@ def penalty(result, gain):
 def customKey(ctype, key):
     print(ctype + "!")
     if GAME.localstance == 'Offense':
-        line = json_reader.readJson("data/teams/"+GAME.team, attribute=key)
+        line = json_reader.readJson(GAME.team, attribute=key)
     else:
-        line = json_reader.readJson("data/teams/"+GAME.enemy, attribute=key)
+        line = json_reader.readJson(GAME.enemy, attribute=key)
     print(line)
     newRoll = GAME.weightedRoll('Offense', random.random()*100)
     newPlay = line[newRoll]

@@ -33,7 +33,7 @@ A = [
     ]
 """
 def weightedRoll(stance, perc):
-    numProbTable = json_reader.readJson("data/dice.json")
+    numProbTable = json_reader.readJson("dice")
     for sheetRoll in numProbTable[stance]:
         if numProbTable[stance][numProbTable[stance].index(sheetRoll)+1] > perc:
             #print (sheetRoll, numProbTable[stance].index(sheetRoll))
@@ -75,6 +75,10 @@ GAME.localstance = ''
 GAME.yard = 40
 GAME.boob = False
 GAME.TD = False
+GAME.offplay = None
+GAME.defplay = None
+GAME.team = None
+GAME.enemy = None
 
 GAME.setTeam = setTeam
 GAME.setEnemy = setEnemy
