@@ -118,6 +118,7 @@ class FuhbuhQueue():
 
         if GAME.defplay and GAME.offplay:
             turnController.fullTurn()
+            self.correctStances()
 
     def correctStances(self):
         """

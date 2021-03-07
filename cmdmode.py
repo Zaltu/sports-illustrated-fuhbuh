@@ -30,8 +30,6 @@ def fullGame():
         if GAME.TD:
             turnController.kickoff()
 
-        Q.correctStances()
-
     print("Final yard: %s" % GAME.yard)
     print("Final down: %s" % GAME.down)
 
