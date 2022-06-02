@@ -14,11 +14,13 @@ class Player():
     :param socketio connection: connection with the remote player
     :param str team: player's team name
     :param FuhbuhQueue queue: the multiplayer game manager
+    :param WebSocket socketconn: the player's ws connection, to send updates to
     """
-    def __init__(self, connection, team, queue):
-        self.connection = connection
+    def __init__(self, nameid, team, queue, socketconn):
+        self.nameid = nameid
         self.team = team
         self.queue = queue
+        self.socketconn = socketconn
         if GAME.team:
             GAME.setEnemy(team)
             self.localstance = "Defense"
@@ -45,18 +47,19 @@ class FuhbuhQueue():
         self.player1 = None
         self.player2 = None
 
-    def connect(self, connection, playerteam):
+    def connect(self, nameid, playerteam, connection):
         """
         Top-level observer pattern for connecting a player to the model.
         Passes the event received to the connection implementation, and sets the game state up if all players
         have joined.
-        :param socketio connection: socket used for events to this player TODO
+        :param socketio nameid: UUID for this player, so we know when 2 have joined
         :param str playerteam: name of the team to assign.
+        :param WebSocket connection: the player's ws connection, to send updates to
         """
         if self.player1:
-            self.player2 = Player(connection, playerteam, self)
+            self.player2 = Player(nameid, playerteam, self, connection)
         else:
-            self.player1 = Player(connection, playerteam, self)
+            self.player1 = Player(nameid, playerteam, self, connection)
         if self.player1 and self.player2:
             self.setupGame()
 
@@ -68,9 +71,9 @@ class FuhbuhQueue():
 
         :raises SystemError: if an unknown connection disconnected
         """
-        if disconnection == self.player1.connection:
+        if disconnection == self.player1.nameid:
             self.player1 = None
-        elif disconnection == self.player2.connection:
+        elif disconnection == self.player2.nameid:
             self.player2 = None
         else:
             raise SystemError("Unknown connection lost, something wacko happened.")
@@ -119,6 +122,7 @@ class FuhbuhQueue():
         if GAME.defplay and GAME.offplay:
             turnController.fullTurn()
             self.correctStances()
+
 
     def correctStances(self):
         """

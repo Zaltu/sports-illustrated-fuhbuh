@@ -106,3 +106,5 @@ GAME.weightedRoll = weightedRoll
 GAME.switchYardSide = switchYardSide
 GAME.toggleStance = toggleStance
 GAME.validateState = validateState
+
+GAME.printables = []
