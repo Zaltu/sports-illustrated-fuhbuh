@@ -56,12 +56,14 @@ def weightedRoll(stance, perc):
 
 #pylint: disable=missing-function-docstring
 # Setters
-def setTeam(team):
+def setTeam(team, nameid):
     GAME.team = team
+    GAME.teamid = nameid
 
 
-def setEnemy(team):
+def setEnemy(team, nameid):
     GAME.enemy = team
+    GAME.enemyid = nameid
 
 
 def setState(state):
@@ -88,12 +90,10 @@ def toggleStance():
 GAME.clock = ['1st', 720]
 GAME.simplePriorityLow = ['+', '-']
 GAME.score = [0, 0] # (Me, Them)
-GAME.state = "CoinFlip" # QWidget object
-GAME.conn = None # IP address or connection object for the second player
 GAME.localstance = ''
 GAME.yard = 40
 GAME.boob = False
-GAME.TD = False
+GAME.TD = True
 GAME.offplay = None
 GAME.defplay = None
 GAME.team = None
@@ -106,5 +106,22 @@ GAME.weightedRoll = weightedRoll
 GAME.switchYardSide = switchYardSide
 GAME.toggleStance = toggleStance
 GAME.validateState = validateState
+
+def build_state(text):
+    score = [
+        GAME.score[0] if GAME.localstance == "Offense" else GAME.score[1],
+        GAME.score[1] if GAME.localstance == "Offense" else GAME.score[0]
+    ]
+    GAME.printables.append({
+        "message": text,
+        "yard": GAME.yard,
+        "down": GAME.down,
+        "offplayer": GAME.teamid if GAME.localstance == "Offense" else GAME.enemyid,
+        "clock": GAME.clock,
+        "score": score,
+        "TD": GAME.TD
+    })
+
+GAME.build_state = build_state
 
 GAME.printables = []

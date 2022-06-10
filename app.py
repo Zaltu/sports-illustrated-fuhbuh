@@ -28,6 +28,7 @@ def echo(conn):
             gamemanager.staticfork(data, conn)
     except ConnectionClosed:
         print("Disconnected")
+        gamemanager.disconnect()
 
 if __name__ == '__main__':
     Flask.run(app, debug=True)

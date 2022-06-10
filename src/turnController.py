@@ -1,6 +1,5 @@
 """
 Module storing all functionality revolving around managing a single turn in a game of fuhbuh.
-TODO: All prints should be changed to loggers, as they are for CMD mode.
 """
 from src import GAME, QNAMES
 from src.play import play
@@ -9,10 +8,10 @@ def turnOver():
     """
     Turn the ball over to the team currently on defense.
     """
-    GAME.printables.append("Switched sides!")  # Only for CMD mode
+    GAME.build_state("Switched sides!")
     GAME.down = 1
     GAME.toggleStance()
-    GAME.printables.append("Offense is now on the %s yard line." % GAME.yard)  # Only for CMD mode
+    GAME.build_state("Offense is now on the %s yard line." % GAME.yard)
 
 
 def clock(star):
@@ -24,7 +23,7 @@ def clock(star):
     """
     GAME.clock[1] -= 30 if not star else 10
     if GAME.clock[1] <= 0:
-        GAME.printables.append("Changing quarters")  # Only for CMD mode
+        GAME.build_state("Changing quarters")
         changeQuarters()
     GAME.boob = False
 
@@ -48,8 +47,8 @@ def gameOver():
     """
     The game is done. Toggle killswitch.
     """
-    GAME.printables.append("Game over")  # Only for CMD mode
-    GAME.printables.append("Final score: %s to %s" % (GAME.score[0], GAME.score[1]))  # Only for CMD mode
+    GAME.build_state("Game over")  # Only for CMD mode
+    GAME.build_state("Final score: %s to %s" % (GAME.score[0], GAME.score[1]))  # Only for CMD mode
     GAME.end = True
 
 
@@ -58,21 +57,18 @@ def handleFluff():
     Log some stats as to the current state of the game.
     For CMD mode only.
     """
-    GAME.printables.append("")
     if GAME.firstdown >= 100:
-        GAME.printables.append("%s and goal on the %s" % (QNAMES[GAME.down-1], GAME.yard))
+        GAME.build_state("%s and goal on the %s" % (QNAMES[GAME.down-1], GAME.yard))
     else:
-        GAME.printables.append("%s and %s on the %s" % (QNAMES[GAME.down-1], GAME.firstdown-GAME.yard, GAME.yard))
-
-    GAME.printables.append("\nGame time: %s" % GAME.clock)
+        GAME.build_state("%s and %s on the %s" % (QNAMES[GAME.down-1], GAME.firstdown-GAME.yard, GAME.yard))
 
 
 def handleFluffCall():
     """
     Log the calls made, and the rolled results on their individual table.
     """
-    GAME.printables.append("Offense callout: %s -> %s" % (GAME.offplay, GAME.rolls['Offense']))
-    GAME.printables.append("Defense callout: %s -> %s" % (GAME.defplay, GAME.rolls['Defense']))
+    GAME.build_state("Offense callout: %s -> %s" % (GAME.offplay, GAME.rolls['Offense']))
+    GAME.build_state("Defense callout: %s -> %s" % (GAME.defplay, GAME.rolls['Defense']))
 
 
 def handleTD():
@@ -80,8 +76,8 @@ def handleTD():
     Manage touchdowns. Update the score and toggle the TD switch, but DO NOT KICKOFF AGAIN YET.
     """
     if GAME.yard >= 100:
-        GAME.printables.append("TOUCHDOWN!")  # Only for CMD mode
         handleScore()
+        GAME.build_state("TOUCHDOWN!")  # Only for CMD mode
         GAME.TD = True
 
 
@@ -107,9 +103,9 @@ def handleDowns():
     if GAME.yard >= 100:  # TD
         return
     if GAME.yard >= GAME.firstdown:
-        GAME.printables.append("First Down!")  # Only for CMD mode
         GAME.down = 1
         GAME.firstdown = GAME.yard + 10
+        GAME.build_state("First Down!")  # Only for CMD mode
     else:
         GAME.down += 1
     if GAME.down == 5:
@@ -137,7 +133,6 @@ def kickoff():
     Process all necesary calls for a kickoff.
     TODO: Kickoff returns as a decision.
     """
-    GAME.printables.append("")  # Only for CMD mode
     GAME.TD = False
     GAME.yard = 40
     play.customKey('Kickoff', 'Kickoff')
@@ -145,6 +140,7 @@ def kickoff():
     play.customKey('Kickoff Return', 'Kickoff Return')
     GAME.firstdown = GAME.yard + 10
     GAME.down = 1
+    handleFluff()  # Only for CMD mode
 
 
 def punt():

@@ -22,10 +22,10 @@ class Player():
         self.queue = queue
         self.socketconn = socketconn
         if GAME.team:
-            GAME.setEnemy(team)
+            GAME.setEnemy(team, nameid)
             self.localstance = "Defense"
         else:
-            GAME.setTeam(team)
+            GAME.setTeam(team, nameid)
             self.localstance = "Offense"
 
     def makeCall(self, call):
@@ -34,7 +34,7 @@ class Player():
 
         :param str call: call made by the player (eg "End Run")
         """
-        self.queue.submitCall(call, self.localstance)
+        self.queue.submitCall(call, self.localstance, self)
 
 
 class FuhbuhQueue():
@@ -71,12 +71,8 @@ class FuhbuhQueue():
 
         :raises SystemError: if an unknown connection disconnected
         """
-        if disconnection == self.player1.nameid:
-            self.player1 = None
-        elif disconnection == self.player2.nameid:
-            self.player2 = None
-        else:
-            raise SystemError("Unknown connection lost, something wacko happened.")
+        self.player1 = None
+        self.player2 = None
         self.setupGame()
 
     def setupGame(self):
@@ -99,7 +95,7 @@ class FuhbuhQueue():
         GAME.score = [0, 0]
         GAME.validateState()
 
-    def submitCall(self, call, stance):
+    def submitCall(self, call, stance, player):
         """
         Process the result of the call, if possible.
         If all necessary calls have been made, process the turn.
@@ -107,21 +103,40 @@ class FuhbuhQueue():
         :param str call: the call made by the player (eg End Run)
         :param str stance: the stance (context) the call is made in
         """
+        if call == "Kickoff":
+            turnController.kickoff()
+            self.correctStances()
+            GAME.printables.append("READY")
+            return
+        elif call == "Punt":
+            turnController.punt()
+            self.correctStances()
+            GAME.printables.append("READY")
+            return
+
         if stance == "Offense":
             GAME.offplay = call
             GAME.callout = call
             play.roll(GAME.offplay, "Offense")
             if GAME.defplay:
                 play.roll(GAME.defplay, "Defense", offensePlay=GAME.offplay)
+            else:
+                print("Waiting to player %s" % player.nameid)
+                player.socketconn.send("WAITING")
 
         if stance == "Defense":
             GAME.defplay = call
             if GAME.offplay:
                 play.roll(GAME.defplay, "Defense", offensePlay=GAME.offplay)
+            else:
+                print("Waiting to player %s" % player.nameid)
+                player.socketconn.send("WAITING")
 
         if GAME.defplay and GAME.offplay:
             turnController.fullTurn()
             self.correctStances()
+            GAME.printables.append("READY")
+
 
 
     def correctStances(self):

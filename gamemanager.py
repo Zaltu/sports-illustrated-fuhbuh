@@ -60,7 +60,12 @@ def staticfork(event, connection):
         game.makeplay(event)
         toprint = GAME.printables
         GAME.printables = []
-        game.emit(toprint or WAITING_PRINTABLES)
-    
+        if toprint:
+            game.emit(toprint)
+
+
+def disconnect():
+    game.Q.disconnect()
+    game.ready = False
 
 

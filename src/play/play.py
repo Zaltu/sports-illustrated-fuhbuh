@@ -137,6 +137,7 @@ def interception(result):
     """
     GAME.yard += (int)(result.split(" ")[1])
     GAME.toggleStance()
+    GAME.down = 1
 
 
 def fumble(result):
@@ -153,11 +154,11 @@ def fumble(result):
     GAME.yard += (int)(result.split(" ")[1])
     recroll = random.random()*100
     if recroll <= fum:
-        print("Fumble recovered!")
+        GAME.build_state("Fumble recovered!")
         return
-    print("Fumble lost!")
     GAME.toggleStance()
     GAME.down = 1
+    GAME.build_state("Fumble lost!")
 
 
 def penalty(result, gain):
@@ -194,7 +195,7 @@ def customKey(ctype, key):
     :param str ctype: which type of roll to perform (eg "Kickoff")
     :param str key: the same thing apparently, I forget why they're different
     """
-    print(ctype + "!")
+    GAME.build_state(ctype + "!")
     if GAME.localstance == 'Offense':
         line = json_reader.readJson(GAME.team, attribute=key)
     else:
@@ -202,9 +203,8 @@ def customKey(ctype, key):
     print(line)
     newRoll = GAME.weightedRoll('Offense', random.random()*100)
     newPlay = line[newRoll]
-    print(ctype + " roll: %s" % newPlay)
+    GAME.build_state(ctype + " roll: %s" % newPlay)
     PLAYMAP[_rolltype(newPlay)](newPlay)
-
 
 
 PLAYMAP = {
