@@ -31,4 +31,4 @@ def echo(conn):
         gamemanager.disconnect()
 
 if __name__ == '__main__':
-    Flask.run(app, debug=True)
+    Flask.run(app, debug=True, host='0.0.0.0')
